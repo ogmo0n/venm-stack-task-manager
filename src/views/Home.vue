@@ -1,7 +1,6 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div id="custom-home">
+    <HelloWorld />
   </div>
 </template>
 
@@ -13,6 +12,32 @@ export default {
   name: "home",
   components: {
     HelloWorld
+  },
+  beforeCreate() {
+    fetch(this.$store.state.apiUrl + "/api/user", {
+      method: "GET"
+    })
+    // .then(res => res.json())
+    .then(res => console.log(res));
   }
 };
 </script>
+
+<style scoped>
+#custom-home {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.btn-primary {
+  background-color: #32aced !important;
+}
+.btn-success {
+  background-color: #4fc08d !important;
+}
+.btn-success:hover {
+  background-color: #3da978 !important;
+}
+</style>
