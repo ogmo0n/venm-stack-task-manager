@@ -1,5 +1,7 @@
 "use strict";
 
+require("core-js/modules/es6.regexp.to-string");
+
 var _express = _interopRequireDefault(require("express"));
 
 var _routes = require("./routes");
@@ -30,7 +32,7 @@ const port = 3000;
 (0, _db.dbConnect)();
 (0, _routes.registerRoutes)(app);
 app.get("/", (req, res) => {
-  process.env.NODE_ENV !== "production" ? res.send("Running server in development mode") : res.sendFile("index.html", {
+  if (!process.env.NODE_ENV || process.env.NODE_ENV.toString().trim() !== "production") return res.send("Running server in development mode");else return res.sendFile("index.html", {
     root: __dirname + "/../dist/"
   });
 });

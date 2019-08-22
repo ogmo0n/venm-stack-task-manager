@@ -5,6 +5,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
 
@@ -14,7 +15,7 @@ export default {
     HelloWorld
   },
   beforeCreate() {
-    fetch(this.$store.state.apiUrl + "/api/user", {
+    fetch(this.$store.state.apiUrl + "/user", {
       method: "GET"
     })
     // .then(res => res.json())

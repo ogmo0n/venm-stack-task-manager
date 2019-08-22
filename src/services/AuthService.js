@@ -1,15 +1,31 @@
 import store from "../store";
+import { http } from "./HttpService";
+import jwt from "jsonwebtoken";
+// import { generateJWT } from "../../dev-server/services/auth-service";
 
 export function isLoggedIn() {
   const token = localStorage.getItem("token");
   return token != null;
 }
 
-export function login() {
-  const token = {
-    username: "Chris"
-  };
-  setToken(token);
+export function login(user) {
+  return http()
+    .post("/auth", user)
+    .then(res => {
+      if (res) {
+        // console.log(res);
+        setToken(res.data.token);
+      }
+    });
+}
+
+export function logout() {
+  localStorage.clear();
+  store.dispatch("authenticate");
+}
+
+export function getToken() {
+  return localStorage.getItem("token");
 }
 
 function setToken(token) {
@@ -18,9 +34,23 @@ function setToken(token) {
 }
 
 export function getUserName() {
-  return "Chris";
+  const token = decodeToken();
+  if (!token) return null;
+  return token.user.username;
 }
 
 export function getUserId() {
-  return 1;
+  const token = decodeToken();
+  if (!token) return null;
+  return token.user.id;
+}
+
+export function registerUser(user) {
+  return http().post("/register", user);
+}
+
+function decodeToken() {
+  const token = getToken();
+  if (!token) return null;
+  return jwt.decode(token);
 }

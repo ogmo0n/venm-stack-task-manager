@@ -11,15 +11,20 @@ const userSchema = new mongoose.Schema({
 
 userSchema.set("timestamps", true);
 
-userSchema.virtual("fullName").get(() => {
-  console.log("userSchema virtual arrow function");
+// Returns a transient field client-side without actually adding it to the schema
+userSchema.virtual("fullName").get(function() {
   const first = StringUtil.capitalize(this.first.toLowerCase());
   const last = StringUtil.capitalize(this.last.toLowerCase());
   return `${first} ${last}`;
 });
 
-userSchema.pre("save", next => {
-  console.log("userSchema pre arrow function");
+// Static methods that can be called from anywhere (e.g., User.passwordMatches)
+userSchema.statics.passwordMatches = function(password, hash) {
+  return bcrypt.compareSync(password, hash);
+};
+
+// Runs validation before saving a user
+userSchema.pre("save", function(next) {
   this.username = this.username.toLowerCase();
   this.first = this.first.toLowerCase();
   this.last = this.last.toLowerCase();

@@ -27,9 +27,12 @@ dbConnect();
 registerRoutes(app);
 
 app.get("/", (req, res) => {
-  process.env.NODE_ENV !== "production"
-    ? res.send("Running server in development mode")
-    : res.sendFile("index.html", { root: __dirname + "/../dist/" });
+  if (
+    !process.env.NODE_ENV ||
+    process.env.NODE_ENV.toString().trim() !== "production"
+  )
+    return res.send("Running server in development mode");
+  else return res.sendFile("index.html", { root: __dirname + "/../dist/" });
 });
 
 app.listen(port, () =>

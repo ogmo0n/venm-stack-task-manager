@@ -4,7 +4,7 @@ import User from "../../model/user-model";
 export function index(req, res) {
   const validation = validateIndex(req.body);
   if (!validation.isValid)
-    res.status(400).json({ message: validation.message });
+    return res.status(400).json({ message: validation.message });
 
   const user = new User({
     username: req.body.username,
@@ -21,6 +21,7 @@ export function index(req, res) {
     }
     return res.status(201).json();
   });
+  return res.status(201).json(); // ????
 }
 
 function validateIndex(body) {

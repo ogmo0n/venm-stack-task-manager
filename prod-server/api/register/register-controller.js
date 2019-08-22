@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function index(req, res) {
   const validation = validateIndex(req.body);
-  if (!validation.isValid) res.status(400).json({
+  if (!validation.isValid) return res.status(400).json({
     message: validation.message
   });
   const user = new _userModel.default({
@@ -35,6 +35,7 @@ function index(req, res) {
 
     return res.status(201).json();
   });
+  return res.status(201).json(); // ????
 }
 
 function validateIndex(body) {

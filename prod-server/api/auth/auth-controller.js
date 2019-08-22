@@ -9,11 +9,13 @@ var _stringUtil = require("../../utilities/string-util");
 
 var _userModel = _interopRequireDefault(require("../../model/user-model"));
 
+var _authService = require("../../services/auth-service");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function index(req, res) {
   const validation = validateIndex(req.body);
-  if (!validation.isValid) res.status(400).json({
+  if (!validation.isValid) return res.status(400).json({
     message: validation.message
   }); // const user = new User({
   //   username: req.body.username.toLowerCase(),
@@ -25,9 +27,14 @@ function index(req, res) {
   }, (error, user) => {
     if (error) return res.status(500).json();
     if (!user) return res.status(401).json();
-    const passwordsMatch = true;
+
+    const passwordsMatch = _userModel.default.passwordMatches(req.body.password, user.password);
+
     if (!passwordsMatch) return res.status(401).json();
-    return res.status(200).json();
+    const token = (0, _authService.generateJWT)(user);
+    return res.status(200).json({
+      token: token
+    });
   });
 }
 

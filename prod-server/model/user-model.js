@@ -19,23 +19,27 @@ const userSchema = new _mongoose.default.Schema({
   last: String,
   password: String
 });
-userSchema.set("timestamps", true);
-userSchema.virtual("fullName").get(() => {
-  console.log("userSchema virtual arrow function");
+userSchema.set("timestamps", true); // Returns a transient field client-side without actually adding it to the schema
 
-  const first = _stringUtil.StringUtil.capitalize((void 0).first.toLowerCase());
+userSchema.virtual("fullName").get(function () {
+  const first = _stringUtil.StringUtil.capitalize(this.first.toLowerCase());
 
-  const last = _stringUtil.StringUtil.capitalize((void 0).last.toLowerCase());
+  const last = _stringUtil.StringUtil.capitalize(this.last.toLowerCase());
 
   return "".concat(first, " ").concat(last);
-});
-userSchema.pre("save", next => {
-  console.log("userSchema pre arrow function");
-  (void 0).username = (void 0).username.toLowerCase();
-  (void 0).first = (void 0).first.toLowerCase();
-  (void 0).last = (void 0).last.toLowerCase();
-  const unsafePassword = (void 0).password;
-  (void 0).password = _bcrypt.default.hashSync(unsafePassword);
+}); // Static methods that can be called from anywhere (e.g., User.passwordMatches)
+
+userSchema.statics.passwordMatches = function (password, hash) {
+  return _bcrypt.default.compareSync(password, hash);
+}; // Runs validation before saving a user
+
+
+userSchema.pre("save", function (next) {
+  this.username = this.username.toLowerCase();
+  this.first = this.first.toLowerCase();
+  this.last = this.last.toLowerCase();
+  const unsafePassword = this.password;
+  this.password = _bcrypt.default.hashSync(unsafePassword);
   next();
 });
 

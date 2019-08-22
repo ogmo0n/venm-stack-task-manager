@@ -23,7 +23,7 @@
               Home
             </router-link>
           </li>
-          <li class="nav-item">
+          <li v-if="$store.state.isLoggedIn" class="nav-item">
             <router-link to="/tasks" class="nav-link" exact>
               Tasks
             </router-link>
@@ -33,26 +33,40 @@
               Register
             </router-link>
           </li>
-          <li class="nav-item">
+          <li v-if="!$store.state.isLoggedIn" class="nav-item">
             <router-link to="/login" class="nav-link" exact>
               Login
             </router-link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Logout</a>
+          <li v-if="$store.state.isLoggedIn" class="nav-item">
+            <a @click.prevent="logout()" class="nav-link" href="#">Logout</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
-              {{ this.$store.state.username
-                ? this.$store.state.username
-                : "User" }}
-              </a>
+              {{
+                this.$store.state.username ? this.$store.state.username : "User"
+              }}
+            </a>
           </li>
         </ul>
       </div>
     </nav>
   </header>
 </template>
+
+<script>
+import * as auth from '../services/AuthService';
+
+export default {
+  name: 'Navbar',
+  methods: {
+    logout: function() {
+      auth.logout();
+      this.$router.push({ name: 'home' });
+    }
+  }
+}
+</script>
 
 <style scoped>
 /* Mobile */
