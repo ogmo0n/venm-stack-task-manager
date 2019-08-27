@@ -21,7 +21,6 @@ export function index(req, res) {
     }
     return res.status(201).json();
   });
-  return res.status(201).json(); // ????
 }
 
 function validateIndex(body) {

@@ -24,6 +24,8 @@ function index(req, res) {
   });
   user.save(error => {
     if (error) {
+      console.log("Error:" + error);
+
       if (error.code === 11000) {
         return res.status(403).json({
           message: "Username is already taken"
@@ -34,8 +36,7 @@ function index(req, res) {
     }
 
     return res.status(201).json();
-  });
-  return res.status(201).json(); // ????
+  }); // return res.status(201).json(); // ????
 }
 
 function validateIndex(body) {

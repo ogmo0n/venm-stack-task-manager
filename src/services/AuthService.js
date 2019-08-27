@@ -1,7 +1,6 @@
 import store from "../store";
 import { http } from "./HttpService";
 import jwt from "jsonwebtoken";
-// import { generateJWT } from "../../dev-server/services/auth-service";
 
 export function isLoggedIn() {
   const token = localStorage.getItem("token");
@@ -13,7 +12,7 @@ export function login(user) {
     .post("/auth", user)
     .then(res => {
       if (res) {
-        // console.log(res);
+        console.log(res);
         setToken(res.data.token);
       }
     });
@@ -46,7 +45,13 @@ export function getUserId() {
 }
 
 export function registerUser(user) {
-  return http().post("/register", user);
+  return http()
+    .post("/register", user)
+    .then(res => {
+      if (res) {
+        console.log(res);
+      }
+    });
 }
 
 function decodeToken() {

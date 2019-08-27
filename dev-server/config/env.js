@@ -15,7 +15,7 @@ function setDevEnv(app) {
   app.use(bodyParser.json());
   app.use(morgan("dev"));
   app.use(cors());
-  process.env.DB_URL = "mongodb://localhost:27017/venm-db-dev";
+  process.env.DB_URL = "mongodb://localhost:27017/test";
   process.env.TOKEN_SECRET = "my-dev-token";
 }
 
